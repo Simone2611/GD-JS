@@ -469,13 +469,15 @@ function update() {
 
 function hitspike(player, spikes) {
   morti++;
-  mode = "cube";
+
   localStorage.setItem("morti", morti);
   if (noclipAcc == "on") {
     cheat = "on";
   } else {
     player.scale = 1;
+    mode = "cube";
     jump = -270;
+    miniplayer = false;
     player.setX(20);
     player.setY(300);
     player.setY(510);
