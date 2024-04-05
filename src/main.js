@@ -13,6 +13,7 @@ import wave from "../assets/wave.png";
 import cubeportal from "../assets/cubeportal.png";
 import waveportal from "../assets/waveportal.png";
 import ufoportal from "../assets/ufoportal.png";
+var normp;
 var wavep;
 var ufop;
 var cubep;
