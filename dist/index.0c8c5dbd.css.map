@@ -1,0 +1,1 @@
+{"mappings":"AAAA;;;;;;;AAMA;;;;AAGA","sources":["css.css"],"sourcesContent":["canvas {\n  display: block;\n  margin: auto;\n  transform: translateY(7%);\n  border-radius: 10px;\n}\n.options {\n  margin-top: 5rem;\n}\n#game {\n  height: 665px;\n}\n"],"names":[],"version":3,"file":"index.0c8c5dbd.css.map","sourceRoot":"/__parcel_source_root/"}

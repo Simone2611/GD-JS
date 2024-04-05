@@ -1,0 +1,16 @@
+canvas {
+  border-radius: 10px;
+  margin: auto;
+  display: block;
+  transform: translateY(7%);
+}
+
+.options {
+  margin-top: 5rem;
+}
+
+#game {
+  height: 665px;
+}
+
+/*# sourceMappingURL=index.0c8c5dbd.css.map */

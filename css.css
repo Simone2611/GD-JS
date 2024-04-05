@@ -1,0 +1,12 @@
+canvas {
+  display: block;
+  margin: auto;
+  transform: translateY(7%);
+  border-radius: 10px;
+}
+.options {
+  margin-top: 5rem;
+}
+#game {
+  height: 665px;
+}
