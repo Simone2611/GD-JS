@@ -16,6 +16,7 @@ import ufoportal from "../assets/ufoportal.png";
 var normp;
 var wavep;
 var ufop;
+var keyEsc;
 var cubep;
 var noclipAcc = "off";
 var player;
