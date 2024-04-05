@@ -4,6 +4,7 @@ import bg from "../assets/bg.jpeg";
 import idle from "../assets/icon_1.png";
 import block from "../assets/Block_1.png";
 import spike from "../assets/spike.png";
+import spikeflip from "../assets/spikeflip.png";
 import orby from "../assets/orb_yellow.png";
 import miniportal from "../assets/miniportal.png";
 import normalportal from "../assets/normalportal.png";
@@ -15,11 +16,16 @@ import waveportal from "../assets/waveportal.png";
 import ufoportal from "../assets/ufoportal.png";
 var normp;
 var wavep;
+var miniplayer = false;
 var ufop;
 var keyEsc;
 var cubep;
 var noclipAcc = "off";
 var player;
+if (localStorage.getItem("speedhack") == null) {
+  localStorage.setItem("speedhack", 1);
+}
+var speedhack = 1;
 var jump = -270;
 var cheat = "";
 var platforms;
@@ -31,12 +37,16 @@ var l = true;
 if (localStorage.getItem("morti") == null) {
   localStorage.setItem("morti", 0);
 }
+if (localStorage.getItem("gamekey") == null) {
+  localStorage.setItem("gamekey", "arrow");
+  window.location.reload;
+}
 var minip;
 var morti = localStorage.getItem("morti");
 var spikes;
 var fps;
 var cursors;
-var speed = 150;
+var speed = 150 * speedhack;
 var keyW;
 var keyR;
 var keySpace;
@@ -68,6 +78,7 @@ function preload() {
   this.load.image("idle", idle);
   this.load.image("block", block);
   this.load.image("spike", spike);
+  this.load.image("spikeflip", spikeflip);
   this.load.image("orby", orby);
   this.load.image("miniportal", miniportal);
   this.load.image("normalportal", normalportal);
@@ -105,7 +116,7 @@ function create() {
 
   // spike
   spikes = this.physics.add.staticGroup();
-
+  spikes.create(360, 480, "spikeflip").setSize(6, 12, true);
   spikes.create(400, 537, "spike").setSize(6, 12, true);
   spikes.create(430, 537, "spike").setSize(6, 12, true);
   spikes.create(460, 537, "spike").setSize(6, 12, true);
@@ -113,6 +124,19 @@ function create() {
   spikes.create(600, 537, "spike").setSize(6, 12, true);
   spikes.create(630, 537, "spike").setSize(6, 12, true);
   spikes.create(660, 537, "spike").setSize(6, 12, true);
+
+  spikes.create(1100, 500, "spikeflip").setSize(6, 12, true);
+  spikes.create(1125, 537, "spike").setSize(6, 12, true);
+  spikes.create(1125, 544, "spike").setSize(6, 12, true).scale = 0.5;
+
+  spikes.create(1150, 500, "spikeflip").setSize(6, 12, true);
+  spikes.create(1175, 537, "spike").setSize(6, 12, true);
+  spikes.create(1175, 544, "spike").setSize(6, 12, true).scale = 0.5;
+
+  spikes.create(1200, 500, "spikeflip").setSize(6, 12, true);
+  spikes.create(1225, 537, "spike").setSize(6, 12, true);
+  spikes.create(1225, 544, "spike").setSize(6, 12, true).scale = 0.5;
+
   // //orb
   // this.orby = this.physics.add.staticGroup();
 
@@ -137,6 +161,7 @@ function create() {
   minip = this.physics.add.staticGroup();
 
   minip.create(800, 500, "miniportal");
+  minip.create(1050, 500, "miniportal");
   // normal
 
   normp = this.physics.add.staticGroup();
@@ -191,15 +216,29 @@ function create() {
   this.cameras.main.startFollow(player);
   this.cameras.main.setDeadzone(null, 400);
 
-  player.setY(520);
+  player.setY(510);
 }
 
 function update() {
+  if (miniplayer == true) {
+    if (mode == "wave") {
+      jump = -400;
+    } else {
+      jump = -200;
+    }
+  }
+  if (speedhack != 1) {
+    cheat = "on";
+  }
+  speedhack = localStorage.getItem("speedhack");
+  speed = 150 * speedhack;
+
   noclipAcc = localStorage.getItem("noclip");
   //spike
 
   let controls = localStorage.getItem("gamekey");
   let space = localStorage.getItem("spacebar");
+  player.setVelocityX(speed);
   // Player movement
   // this.checkpoint.anims.play("flag", true);
   if (mode != "cube") {
@@ -411,12 +450,12 @@ function update() {
   }
 
   if (keyR.isDown) {
-    morti++;
     mode = "cube";
     player.scale = 1;
     jump = -270;
     player.setX(20);
-    player.setY(520);
+    player.setY(300);
+    player.setY(510);
   }
 
   fps.setText(Math.round(game.loop.actualFps) + " FPS");
@@ -437,7 +476,8 @@ function hitspike(player, spikes) {
     player.scale = 1;
     jump = -270;
     player.setX(20);
-    player.setY(520);
+    player.setY(300);
+    player.setY(510);
   }
 }
 
@@ -463,12 +503,13 @@ function mini(player, minip) {
   } else {
     jump = -200;
   }
+  miniplayer = true;
   player.scale = 0.5;
 }
 
 function normal(player, minip) {
   // player.setSize(10, 10);
-
+  miniplayer = false;
   jump = -270;
   if (player.scale != 1) {
     player.setY(player.body.position.y - 20);

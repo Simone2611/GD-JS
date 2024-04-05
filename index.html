@@ -21,9 +21,13 @@
       <p id="spacebar"></p>
       <p>
         Far vedere le hitbox e attivare noclip non ti farà completare il livello
+        (stessa cosa con lo speedhack per resettare lo speedhack basta inserire
+        1)
       </p>
       <button id="hitbox">Show Hitbox</button>
       <button id="noclip">Noclip</button>
+      <input id="speed" placeholder="Speedhack 1.2, 2...." />
+      <button id="Speedhack">Invio (speedhack)</button>
       <p>How to play</p>
       <p>Jump: Up arrow, w or spacebar if you enable it</p>
       <p>R = Replay from last Checkpoint</p>
@@ -44,10 +48,22 @@
       });
       const noclip = document.getElementById("noclip");
       noclip.addEventListener("click", (e) => {
-        if (localStorage.getItem("noclip", "on") == "on") {
+        if (localStorage.getItem("noclip") == null) {
           localStorage.setItem("noclip", "off");
         } else {
           localStorage.setItem("noclip", "on");
+        }
+      });
+
+      const Speedhack = document.getElementById("Speedhack");
+      Speedhack.addEventListener("click", (e) => {
+        if (localStorage.getItem("speedhack") == null) {
+          localStorage.setItem("speedhack", 1);
+        } else {
+          let valuespeed = document.getElementById("speed").value;
+          if (valuespeed != 0) {
+            localStorage.setItem("speedhack", valuespeed);
+          }
         }
       });
       const wad = document.getElementById("WAD");
