@@ -453,6 +453,7 @@ function update() {
     mode = "cube";
     player.scale = 1;
     jump = -270;
+    miniplayer = false;
     player.setX(20);
     player.setY(300);
     player.setY(510);
