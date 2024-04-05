@@ -1,6 +1,6 @@
 # Work in progress
 
-### https://simogame.vercel.app/
+### 
 
 # Updates
 
