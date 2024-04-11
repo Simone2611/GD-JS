@@ -624,7 +624,7 @@ var _sawPng = require("../assets/Saw.png");
 var _sawPngDefault = parcelHelpers.interopDefault(_sawPng);
 var global = arguments[3];
 global.Phaser = require("ffd581cbf9e1f579");
-var speed;
+var speed05;
 var speed1;
 var gravity = "normal";
 var jumpwave = -300;
