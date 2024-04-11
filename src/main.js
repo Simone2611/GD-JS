@@ -26,8 +26,10 @@ import speedX4 from "../assets/speed4.png";
 import saw1 from "../assets/Saw.png";
 
 var n = 0;
-
+var trail;
 var speed05;
+var SpeedX;
+var SpeedY;
 var speed1;
 var gravity = "normal";
 var jumpwave = -300;
