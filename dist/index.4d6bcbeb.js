@@ -625,6 +625,7 @@ var _sawPngDefault = parcelHelpers.interopDefault(_sawPng);
 var global = arguments[3];
 global.Phaser = require("fe65fea63b13e015");
 if (localStorage.getItem("anticheat") == null) localStorage.setItem("anticheat", "on");
+var trail;
 var hackss = localStorage.getItem("anticheat");
 var speed05;
 var waveR;
@@ -826,7 +827,6 @@ function create() {
     prevY = player.y;
 }
 function update() {
-    hackss = localStorage.getItem("anticheat");
     gravity;
     if (miniplayer == true) {
         jump = -200;
@@ -1055,40 +1055,6 @@ function update() {
     if (localStorage.getItem("noclip") == "on") {
         this.physics.add.overlap(player, platforms);
         this.physics.add.overlap(player, spikes, hitspike, null, this);
-    }
-    if (hackss != "on") {
-        mode = "cube";
-        player.scale = 1;
-        speed = 200;
-        jump = -250;
-        miniplayer = false;
-        morti++;
-        player.setX(20);
-        player.setY(300);
-        player.setY(510);
-        fps.setText("L");
-    } else if (noclipAcc == "on" && cheat != "on") {
-        mode = "cube";
-        player.scale = 1;
-        speed = 200;
-        jump = -250;
-        miniplayer = false;
-        morti++;
-        player.setX(20);
-        player.setY(300);
-        player.setY(510);
-        fps.setText("L");
-    } else if (speedhack == "on" && cheat != "on") {
-        mode = "cube";
-        player.scale = 1;
-        speed = 200;
-        jump = -250;
-        miniplayer = false;
-        morti++;
-        player.setX(20);
-        player.setY(300);
-        player.setY(510);
-        fps.setText("L");
     }
     if (mode == "wave") {
         trail.lineStyle(2, 0xffffff, 0.5);

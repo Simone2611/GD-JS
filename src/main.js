@@ -27,6 +27,7 @@ import saw1 from "../assets/Saw.png";
 if (localStorage.getItem("anticheat") == null) {
   localStorage.setItem("anticheat", "on");
 }
+var trail;
 var hackss = localStorage.getItem("anticheat");
 var speed05;
 var waveR;
@@ -276,7 +277,6 @@ function create() {
 }
 
 function update() {
-  hackss = localStorage.getItem("anticheat");
   if (gravity != "normal") {
     // dopo mettere qualcosa per portale giallo
   } else {
@@ -557,40 +557,6 @@ function update() {
   if (localStorage.getItem("noclip") == "on") {
     this.physics.add.overlap(player, platforms);
     this.physics.add.overlap(player, spikes, hitspike, null, this);
-  }
-  if (hackss != "on") {
-    mode = "cube";
-    player.scale = 1;
-    speed = 200;
-    jump = -250;
-    miniplayer = false;
-    morti++;
-    player.setX(20);
-    player.setY(300);
-    player.setY(510);
-    fps.setText("L");
-  } else if (noclipAcc == "on" && cheat != "on") {
-    mode = "cube";
-    player.scale = 1;
-    speed = 200;
-    jump = -250;
-    miniplayer = false;
-    morti++;
-    player.setX(20);
-    player.setY(300);
-    player.setY(510);
-    fps.setText("L");
-  } else if (speedhack == "on" && cheat != "on") {
-    mode = "cube";
-    player.scale = 1;
-    speed = 200;
-    jump = -250;
-    miniplayer = false;
-    morti++;
-    player.setX(20);
-    player.setY(300);
-    player.setY(510);
-    fps.setText("L");
   }
 
   if (mode == "wave") {
