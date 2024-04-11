@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Gioco v1.3</title>
     <link rel="stylesheet" href="/index.0c8c5dbd.css">
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <script src="/index.50a1cddf.js"></script><script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
     <style>body {
   margin: 0;
 }
@@ -20,9 +20,8 @@
       <button id="space">SpaceBar</button>
       <p id="spacebar"></p>
       <p>
-        Far vedere le hitbox e attivare noclip non ti farà completare il livello
-        (stessa cosa con lo speedhack per resettare lo speedhack basta inserire
-        1)
+        ShowHitbox and speedhack it will not count as level finished (Reset
+        speedhack by setting it x1)
       </p>
       <button id="hitbox">Show Hitbox</button>
       <button id="noclip">Noclip</button>
@@ -31,11 +30,17 @@
       <p>How to play</p>
       <p>Jump: Up arrow, w or spacebar if you enable it</p>
       <p>R = Replay from last Checkpoint</p>
+
+      <button id="ez">Too Ez?</button>
     </div>
 
     <script src="/index.4d6bcbeb.js" defer=""></script>
 
-    <script>const hitbox = document.getElementById("hitbox");
+    <script>const ez = document.getElementById("ez");
+ez.addEventListener("click", (e)=>{
+    window.location.href = "/challenge.html";
+});
+const hitbox = document.getElementById("hitbox");
 hitbox.addEventListener("click", (e)=>{
     if (localStorage.getItem("hitbox") == 1) {
         localStorage.setItem("hitbox", "0");
@@ -47,7 +52,7 @@ hitbox.addEventListener("click", (e)=>{
 });
 const noclip = document.getElementById("noclip");
 noclip.addEventListener("click", (e)=>{
-    if (localStorage.getItem("noclip") == null) localStorage.setItem("noclip", "off");
+    if (localStorage.getItem("noclip") == null || localStorage.getItem("noclip") == "on") localStorage.setItem("noclip", "off");
     else localStorage.setItem("noclip", "on");
 });
 const Speedhack = document.getElementById("Speedhack");
@@ -68,7 +73,7 @@ const arrow1 = document.getElementById("arrow");
 arrow1.addEventListener("click", (e)=>{
     localStorage.setItem("gamekey", "arrow");
     const current = document.getElementById("current");
-    current.innerText = "Current keys: " + localStorage.getItem("gamekey");
+    current.innerText = "Current keys: w";
 });
 const current = document.getElementById("current");
 current.innerText = "Current keys: " + localStorage.getItem("gamekey");

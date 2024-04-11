@@ -20,9 +20,8 @@
       <button id="space">SpaceBar</button>
       <p id="spacebar"></p>
       <p>
-        Far vedere le hitbox e attivare noclip non ti farà completare il livello
-        (stessa cosa con lo speedhack per resettare lo speedhack basta inserire
-        1)
+        ShowHitbox and speedhack it will not count as level finished (Reset
+        speedhack by setting it x1)
       </p>
       <button id="hitbox">Show Hitbox</button>
       <button id="noclip">Noclip</button>
@@ -31,11 +30,18 @@
       <p>How to play</p>
       <p>Jump: Up arrow, w or spacebar if you enable it</p>
       <p>R = Replay from last Checkpoint</p>
+
+      <button id="ez">Too Ez?</button>
     </div>
 
     <script src="src/main.js" type="module"></script>
 
     <script>
+      const ez = document.getElementById("ez");
+      ez.addEventListener("click", (e) => {
+        window.location.href = "/challenge.html";
+      });
+
       const hitbox = document.getElementById("hitbox");
       hitbox.addEventListener("click", (e) => {
         if (localStorage.getItem("hitbox") == 1) {
@@ -48,7 +54,10 @@
       });
       const noclip = document.getElementById("noclip");
       noclip.addEventListener("click", (e) => {
-        if (localStorage.getItem("noclip") == null) {
+        if (
+          localStorage.getItem("noclip") == null ||
+          localStorage.getItem("noclip") == "on"
+        ) {
           localStorage.setItem("noclip", "off");
         } else {
           localStorage.setItem("noclip", "on");
@@ -76,7 +85,7 @@
       arrow1.addEventListener("click", (e) => {
         localStorage.setItem("gamekey", "arrow");
         const current = document.getElementById("current");
-        current.innerText = "Current keys: " + localStorage.getItem("gamekey");
+        current.innerText = "Current keys: w";
       });
       const current = document.getElementById("current");
       current.innerText = "Current keys: " + localStorage.getItem("gamekey");

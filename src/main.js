@@ -14,6 +14,17 @@ import wave from "../assets/wave.png";
 import cubeportal from "../assets/cubeportal.png";
 import waveportal from "../assets/waveportal.png";
 import ufoportal from "../assets/ufoportal.png";
+
+import speedX05 from "../assets/speed05.png";
+import speedX2 from "../assets/2speed.png";
+import speedX1 from "../assets/speed1.png";
+import speedX3 from "../assets/speed3.png";
+import speedX4 from "../assets/speed4.png";
+var speed;
+var speed1;
+var speed2;
+var speed3;
+var speed4;
 var normp;
 var wavep;
 var miniplayer = false;
@@ -26,7 +37,7 @@ if (localStorage.getItem("speedhack") == null) {
   localStorage.setItem("speedhack", 1);
 }
 var speedhack = 1;
-var jump = -270;
+var jump = -250;
 var cheat = "";
 var platforms;
 var mode = "cube";
@@ -46,10 +57,11 @@ var morti = localStorage.getItem("morti");
 var spikes;
 var fps;
 var cursors;
-var speed = 150 * speedhack;
+var speed = 200 * speedhack;
 var keyW;
 var keyR;
 var keySpace;
+
 var config = {
   type: Phaser.AUTO,
   width: 800,
@@ -58,7 +70,7 @@ var config = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 600 },
+      gravity: { y: 700 },
       debug: false,
       fps: 240,
     },
@@ -88,6 +100,12 @@ function preload() {
   this.load.image("ufoportal", ufoportal);
   this.load.image("waveportal", waveportal);
   this.load.image("cubeportal", cubeportal);
+
+  this.load.image("speed05", speedX05);
+  this.load.image("speed1", speedX1);
+  this.load.image("speed2", speedX2);
+  this.load.image("speed3", speedX3);
+  this.load.image("speed4", speedX4);
 }
 
 function create() {
@@ -108,7 +126,6 @@ function create() {
 
   platforms = this.physics.add.staticGroup();
   //grass
-  platforms.create(20, 600, "ground");
 
   for (let i = -400; i < 20000; i += 100) {
     platforms.create(i, 600, "block");
@@ -207,6 +224,24 @@ function create() {
   this.physics.add.overlap(player, wavep, wavemode, null, this);
   this.physics.add.overlap(player, cubep, cubemode, null, this);
   this.physics.add.overlap(player, ufop, ufomode, null, this);
+  // speed
+  speed05 = this.physics.add.staticGroup();
+  speed1 = this.physics.add.staticGroup();
+  speed2 = this.physics.add.staticGroup();
+  speed3 = this.physics.add.staticGroup();
+  speed4 = this.physics.add.staticGroup();
+
+  speed05.create(2900, 500, "speed05");
+  speed1.create(2600, 400, "speed1");
+  speed2.create(2500, 300, "speed2");
+  speed3.create(2700, 200, "speed3");
+  speed4.create(2800, 100, "speed4");
+
+  this.physics.add.overlap(player, speed05, speedchangeN, null, this);
+  this.physics.add.overlap(player, speed1, speedchange1, null, this);
+  this.physics.add.overlap(player, speed2, speedchange2, null, this);
+  this.physics.add.overlap(player, speed3, speedchange3, null, this);
+  this.physics.add.overlap(player, speed4, speedchange4, null, this);
 
   // WASD
   keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -230,8 +265,6 @@ function update() {
   if (speedhack != 1) {
     cheat = "on";
   }
-  speedhack = localStorage.getItem("speedhack");
-  speed = 150 * speedhack;
 
   noclipAcc = localStorage.getItem("noclip");
   //spike
@@ -452,7 +485,8 @@ function update() {
   if (keyR.isDown) {
     mode = "cube";
     player.scale = 1;
-    jump = -270;
+    speed = 200;
+    jump = -250;
     miniplayer = false;
     player.setX(20);
     player.setY(300);
@@ -476,7 +510,8 @@ function hitspike(player, spikes) {
   } else {
     player.scale = 1;
     mode = "cube";
-    jump = -270;
+    jump = -250;
+    speed = 200;
     miniplayer = false;
     player.setX(20);
     player.setY(300);
@@ -513,7 +548,7 @@ function mini(player, minip) {
 function normal(player, minip) {
   // player.setSize(10, 10);
   miniplayer = false;
-  jump = -270;
+  jump = -250;
   if (player.scale != 1) {
     player.setY(player.body.position.y - 20);
   }
@@ -529,4 +564,27 @@ function wavemode(player, ufop) {
 }
 function cubemode(player, ufop) {
   mode = "cube";
+}
+function speedchangeN() {
+  speed = 200;
+  jump = -250;
+}
+
+function speedchange1() {
+  speed = 250;
+  jump = -240;
+}
+
+function speedchange2() {
+  speed = 300;
+  jump = -230;
+}
+
+function speedchange3() {
+  speed = 400;
+  jump = -220;
+}
+function speedchange4() {
+  speed = 500;
+  jump = -210;
 }
