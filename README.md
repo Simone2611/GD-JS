@@ -23,8 +23,13 @@
 - default block added
 - saw added
 
+<span style="color: #7F3FE0; ">-v 1.1 (Wave Update)</span>
+
+- Wave trail
+- Wave movement mini and normal improved
+
 ---
 
-- npx parcel index.html
+- npx parcel index.html challenge.html
 
 ---

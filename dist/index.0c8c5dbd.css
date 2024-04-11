@@ -9,8 +9,16 @@ canvas {
   margin-top: 5rem;
 }
 
-#game {
-  height: 665px;
+.container {
+  justify-content: center;
+  margin: 0 auto;
+  display: flex;
+}
+
+h1 {
+  text-align: center;
+  margin: 0 0 -2.5rem;
+  padding: 0;
 }
 
 /*# sourceMappingURL=index.0c8c5dbd.css.map */

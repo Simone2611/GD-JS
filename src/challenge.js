@@ -24,6 +24,11 @@ import speedX3 from "../assets/speed3.png";
 import speedX4 from "../assets/speed4.png";
 
 import saw1 from "../assets/Saw.png";
+if (localStorage.getItem("anticheat") == null) {
+  localStorage.setItem("anticheat", "on");
+}
+var n = 0;
+var hackss = localStorage.getItem("anticheat");
 var speed05;
 var speed1;
 var gravity = "normal";
@@ -51,15 +56,15 @@ var Deaths;
 var k = true;
 var w = true;
 var l = true;
-if (localStorage.getItem("morti") == null) {
-  localStorage.setItem("morti", 0);
+if (localStorage.getItem("morti-ch") == null) {
+  localStorage.setItem("morti-ch", 0);
 }
 if (localStorage.getItem("gamekey") == null) {
   localStorage.setItem("gamekey", "arrow");
   window.location.reload;
 }
 var minip;
-var morti = localStorage.getItem("morti");
+var morti = localStorage.getItem("morti-ch");
 var spikes;
 var fps;
 var cursors;
@@ -181,9 +186,16 @@ function create() {
   //slab
   platforms.create(360, 460, "slab");
 
+  platforms.create(1400, 460, "slab");
+  platforms.create(1440, 460, "slab");
+  platforms.create(1480, 460, "slab");
+  platforms.create(1520, 460, "slab");
+  platforms.create(1560, 460, "slab");
+
   platforms.create(1950, 480, "slab");
   platforms.create(2400, 440, "slab");
   platforms.create(2400, 520, "slab");
+
   // blocks
   for (let i = 472; i > 30; i -= 30) {
     platforms.create(1100, i, "block2");
@@ -238,7 +250,7 @@ function create() {
     fontFamily: "Arial",
   });
 
-  Deaths = this.add.text(20, 470, morti + " Attempt", {
+  Deaths = this.add.text(20, 440, morti + " Attempt", {
     fontSize: "1.2rem",
     fill: "whitesmoke",
     fontFamily: "Arial",
@@ -283,28 +295,49 @@ function create() {
   this.cameras.main.setDeadzone(null, 400);
 
   player.setY(510);
+  trail = this.add.graphics();
+
+  prevX = player.x;
+  prevY = player.y;
 }
 
 function update() {
+  hackss = localStorage.getItem("anticheat");
   if (gravity != "normal") {
     // dopo mettere qualcosa per portale giallo
   } else {
   }
 
   if (miniplayer == true) {
+    jump = -200;
     if (mode == "wave") {
+      waveR = 1.3;
       if (SpeedX == "05") {
-        wavejump = -400;
+        jumpwave = -400;
       } else if (SpeedX == "1") {
-        wavejump = -500;
+        jumpwave = -550;
       } else if (SpeedX == "2") {
-        wavejump = -600;
+        jumpwave = -600;
       } else if (SpeedX == "3") {
-        wavejump = -700;
+        jumpwave = -700;
       } else if (SpeedX == "4") {
-        wavejump = -800;
+        jumpwave = -900;
       }
     } else {
+    }
+  } else {
+    waveR = 1;
+    jumpwave = -200;
+    if (SpeedX == "05") {
+      jumpwave = -200;
+    } else if (SpeedX == "1") {
+      jumpwave = -250;
+    } else if (SpeedX == "2") {
+      jumpwave = -350;
+    } else if (SpeedX == "3") {
+      jumpwave = -450;
+    } else if (SpeedX == "4") {
+      jumpwave = -500;
     }
   }
   if (speedhack != 1) {
@@ -313,6 +346,7 @@ function update() {
 
   noclipAcc = localStorage.getItem("noclip");
   speedhack = localStorage.getItem("speedhack");
+
   //spike
 
   let controls = localStorage.getItem("gamekey");
@@ -323,8 +357,9 @@ function update() {
   // this.checkpoint.anims.play("flag", true);
   if (mode != "cube") {
     if (mode == "ufo") {
-      player.setSize(20, 20);
       player.setTexture("ufo");
+
+      player.setSize(20, 20);
 
       if (controls == "arrow") {
         if (!player.body.touching.down) {
@@ -411,7 +446,7 @@ function update() {
 
           this.tweens.add({
             targets: player, //your image that must spin
-            rotation: 1, //rotation value must be radian
+            rotation: waveR, //rotation value must be radian
             duration: 20, //duration is in milliseconds
             persist: true,
           });
@@ -429,7 +464,7 @@ function update() {
 
           this.tweens.add({
             targets: player, //your image that must spin
-            rotation: -1, //rotation value must be radian
+            rotation: -waveR, //rotation value must be radian
             duration: 20, //duration is in milliseconds
             persist: true,
           });
@@ -535,10 +570,12 @@ function update() {
     player.scale = 1;
     speed = 200;
     jump = -250;
+    SpeedX = "05";
     miniplayer = false;
     player.setX(20);
     player.setY(300);
     player.setY(510);
+    trail.clear();
   }
 
   fps.setText(Math.round(game.loop.actualFps) + " FPS");
@@ -546,6 +583,59 @@ function update() {
   if (localStorage.getItem("noclip") == "on") {
     this.physics.add.overlap(player, platforms);
     this.physics.add.overlap(player, spikes, hitspike, null, this);
+  }
+  if (hackss != "on") {
+    mode = "cube";
+    player.scale = 1;
+    speed = 200;
+    jump = -250;
+    miniplayer = false;
+    morti++;
+    player.setX(20);
+    player.setY(300);
+    player.setY(510);
+    fps.setText("L");
+  } else if (noclipAcc == "on" && cheat != "on") {
+    mode = "cube";
+    player.scale = 1;
+    speed = 200;
+    jump = -250;
+    miniplayer = false;
+    morti++;
+    player.setX(20);
+    player.setY(300);
+    player.setY(510);
+    fps.setText("L");
+  } else if (speedhack == "on" && cheat != "on") {
+    mode = "cube";
+    player.scale = 1;
+    speed = 200;
+    jump = -250;
+    miniplayer = false;
+    morti++;
+    player.setX(20);
+    player.setY(300);
+    player.setY(510);
+    fps.setText("L");
+  }
+
+  if (mode == "wave") {
+    trail.lineStyle(2, 0xffffff, 0.5);
+    trail.moveTo(player.x, player.y);
+    trail.lineTo(prevX, prevY);
+    trail.strokePath();
+
+    prevX = player.x;
+    prevY = player.y;
+    n++;
+    if (n == 200) {
+      trail.clear();
+      n = 0;
+    }
+  } else {
+    trail.clear();
+    prevX = player.x;
+    prevY = player.y;
   }
 }
 
@@ -560,6 +650,7 @@ function hitspike(player, spikes) {
     mode = "cube";
     jump = -250;
     speed = 200;
+    SpeedX = "05";
     miniplayer = false;
     player.setX(20);
     player.setY(300);
@@ -584,19 +675,16 @@ function checkpointsave() {
 
 function mini(player, minip) {
   // player.setSize(10, 10);
-  if (mode == "wave") {
-    jump = -400;
-  } else {
-    jump = -200;
-  }
+
   miniplayer = true;
-  player.scale = 0.5;
+  player.scale = 0.6;
 }
 
 function normal(player, minip) {
   // player.setSize(10, 10);
   miniplayer = false;
   jump = -250;
+
   if (player.scale != 1) {
     player.setY(player.body.position.y - 20);
   }

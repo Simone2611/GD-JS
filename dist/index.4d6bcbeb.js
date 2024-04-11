@@ -586,6 +586,10 @@ var _icon1Png = require("../assets/icon_1.png");
 var _icon1PngDefault = parcelHelpers.interopDefault(_icon1Png);
 var _block1Png = require("../assets/Block_1.png");
 var _block1PngDefault = parcelHelpers.interopDefault(_block1Png);
+var _slabPng = require("../assets/slab.png");
+var _slabPngDefault = parcelHelpers.interopDefault(_slabPng);
+var _blockdefaultPng = require("../assets/blockdefault.png");
+var _blockdefaultPngDefault = parcelHelpers.interopDefault(_blockdefaultPng);
 var _spikePng = require("../assets/spike.png");
 var _spikePngDefault = parcelHelpers.interopDefault(_spikePng);
 var _spikeflipPng = require("../assets/spikeflip.png");
@@ -616,10 +620,18 @@ var _speed3Png = require("../assets/speed3.png");
 var _speed3PngDefault = parcelHelpers.interopDefault(_speed3Png);
 var _speed4Png = require("../assets/speed4.png");
 var _speed4PngDefault = parcelHelpers.interopDefault(_speed4Png);
+var _sawPng = require("../assets/Saw.png");
+var _sawPngDefault = parcelHelpers.interopDefault(_sawPng);
 var global = arguments[3];
 global.Phaser = require("fe65fea63b13e015");
+if (localStorage.getItem("anticheat") == null) localStorage.setItem("anticheat", "on");
+var hackss = localStorage.getItem("anticheat");
 var speed05;
+var waveR;
 var speed1;
+var n = 0;
+var gravity = "normal";
+var jumpwave = -300;
 var speed2;
 var speed3;
 var speed4;
@@ -652,6 +664,7 @@ var spikes;
 var fps;
 var cursors;
 var speed = 200 * speedhack;
+var SpeedX = "05";
 var keyW;
 var keyR;
 var keySpace;
@@ -679,8 +692,11 @@ var config = {
 var game = new Phaser.Game(config);
 function preload() {
     this.load.image("bg", (0, _bgJpegDefault.default));
+    this.load.image("saw", (0, _sawPngDefault.default));
+    this.load.image("slab", (0, _slabPngDefault.default));
     this.load.image("idle", (0, _icon1PngDefault.default));
     this.load.image("block", (0, _block1PngDefault.default));
+    this.load.image("block2", (0, _blockdefaultPngDefault.default));
     this.load.image("spike", (0, _spikePngDefault.default));
     this.load.image("spikeflip", (0, _spikeflipPngDefault.default));
     this.load.image("orby", (0, _orbYellowPngDefault.default));
@@ -805,27 +821,48 @@ function create() {
     this.cameras.main.startFollow(player);
     this.cameras.main.setDeadzone(null, 400);
     player.setY(510);
+    trail = this.add.graphics();
+    prevX = player.x;
+    prevY = player.y;
 }
 function update() {
+    hackss = localStorage.getItem("anticheat");
+    gravity;
     if (miniplayer == true) {
-        if (mode == "wave") jump = -400;
-        else jump = -200;
+        jump = -200;
+        if (mode == "wave") {
+            waveR = 1.3;
+            if (SpeedX == "05") jumpwave = -400;
+            else if (SpeedX == "1") jumpwave = -550;
+            else if (SpeedX == "2") jumpwave = -600;
+            else if (SpeedX == "3") jumpwave = -700;
+            else if (SpeedX == "4") jumpwave = -900;
+        }
+    } else {
+        waveR = 1;
+        jumpwave = -200;
+        if (SpeedX == "05") jumpwave = -200;
+        else if (SpeedX == "1") jumpwave = -250;
+        else if (SpeedX == "2") jumpwave = -350;
+        else if (SpeedX == "3") jumpwave = -450;
+        else if (SpeedX == "4") jumpwave = -500;
     }
     if (speedhack != 1) cheat = "on";
     noclipAcc = localStorage.getItem("noclip");
+    speedhack = localStorage.getItem("speedhack");
     //spike
     let controls = localStorage.getItem("gamekey");
     let space = localStorage.getItem("spacebar");
-    player.setVelocityX(speed);
+    player.setVelocityX(speed * speedhack);
     // Player movement
     // this.checkpoint.anims.play("flag", true);
     if (mode != "cube") {
         if (mode == "ufo") {
-            player.setSize(30, 30);
             player.setTexture("ufo");
+            player.setSize(20, 20);
             if (controls == "arrow") {
                 if (!player.body.touching.down) {
-                    player.setVelocityX(speed);
+                    player.setVelocityX(speed * speedhack);
                     this.tweens.add({
                         targets: player,
                         rotation: 0,
@@ -833,7 +870,7 @@ function update() {
                         persist: true
                     });
                 } else {
-                    player.setVelocityX(speed);
+                    player.setVelocityX(speed * speedhack);
                     this.tweens.add({
                         targets: player,
                         rotation: 0,
@@ -854,14 +891,14 @@ function update() {
                 if (cursors.up.isUp) l = false;
             } else if (controls == "wad") {
                 if (!player.body.touching.down) {
-                    player.setVelocityX(speed);
+                    player.setVelocityX(speed * speedhack);
                     this.tweens.add({
                         targets: player,
                         rotation: 0,
                         duration: 400,
                         persist: true
                     });
-                } else player.setVelocityX(speed);
+                } else player.setVelocityX(speed * speedhack);
                 if (keyW.isDown && w == false) {
                     player.setVelocityY(jump);
                     w = true;
@@ -889,19 +926,19 @@ function update() {
             }
         } else if (mode == "wave") {
             player.setTexture("wave");
-            player.setSize(13, 13);
+            player.setSize(12, 12);
             if (controls == "arrow") {
                 if (!player.body.touching.down) {
-                    player.setVelocityX(speed);
-                    player.setVelocityY(-jump);
+                    player.setVelocityX(speed * speedhack);
+                    player.setVelocityY(-jumpwave);
                     this.tweens.add({
                         targets: player,
-                        rotation: 1,
+                        rotation: waveR,
                         duration: 20,
                         persist: true
                     });
                 } else {
-                    player.setVelocityX(speed);
+                    player.setVelocityX(speed * speedhack);
                     this.tweens.add({
                         targets: player,
                         rotation: 0,
@@ -910,20 +947,20 @@ function update() {
                     });
                 }
                 if (cursors.up.isDown) {
-                    player.setVelocityY(jump);
+                    player.setVelocityY(jumpwave);
                     this.tweens.add({
                         targets: player,
-                        rotation: -1,
+                        rotation: -waveR,
                         duration: 20,
                         persist: true
                     });
                 }
                 cursors.up.isUp;
             } else if (controls == "wad") {
-                if (!player.body.touching.down) player.setVelocityX(speed);
-                else player.setVelocityX(speed);
+                if (!player.body.touching.down) player.setVelocityX(speed * speedhack);
+                else player.setVelocityX(speed * speedhack);
                 if (keyW.isDown) {
-                    player.setVelocityY(jump);
+                    player.setVelocityY(jumpwave);
                     this.tweens.add({
                         targets: player,
                         rotation: -1,
@@ -935,7 +972,7 @@ function update() {
             }
             if (space == "on") {
                 if (keySpace.isDown) {
-                    player.setVelocityY(jump);
+                    player.setVelocityY(jumpwave);
                     this.tweens.add({
                         targets: player,
                         rotation: -1,
@@ -950,9 +987,9 @@ function update() {
         player.setTexture("idle");
         player.setSize(30, 30);
         if (controls == "arrow") {
-            if (!player.body.touching.down) player.setVelocityX(speed);
+            if (!player.body.touching.down) player.setVelocityX(speed * speedhack);
             else {
-                player.setVelocityX(speed);
+                player.setVelocityX(speed * speedhack);
                 this.tweens.add({
                     targets: player,
                     rotation: 0,
@@ -971,14 +1008,14 @@ function update() {
             }
         } else if (controls == "wad") {
             if (!player.body.touching.down) {
-                player.setVelocityX(speed);
+                player.setVelocityX(speed * speedhack);
                 this.tweens.add({
                     targets: player,
                     rotation: 0,
                     duration: 400,
                     persist: true
                 });
-            } else player.setVelocityX(speed);
+            } else player.setVelocityX(speed * speedhack);
             if (keyW.isDown && player.body.touching.down) {
                 player.setVelocityY(jump);
                 this.tweens.add({
@@ -1006,16 +1043,69 @@ function update() {
         player.scale = 1;
         speed = 200;
         jump = -250;
+        SpeedX = "05";
         miniplayer = false;
         player.setX(20);
         player.setY(300);
         player.setY(510);
+        trail.clear();
     }
     fps.setText(Math.round(game.loop.actualFps) + " FPS");
     Deaths.setText(morti + " Attempts");
     if (localStorage.getItem("noclip") == "on") {
         this.physics.add.overlap(player, platforms);
         this.physics.add.overlap(player, spikes, hitspike, null, this);
+    }
+    if (hackss != "on") {
+        mode = "cube";
+        player.scale = 1;
+        speed = 200;
+        jump = -250;
+        miniplayer = false;
+        morti++;
+        player.setX(20);
+        player.setY(300);
+        player.setY(510);
+        fps.setText("L");
+    } else if (noclipAcc == "on" && cheat != "on") {
+        mode = "cube";
+        player.scale = 1;
+        speed = 200;
+        jump = -250;
+        miniplayer = false;
+        morti++;
+        player.setX(20);
+        player.setY(300);
+        player.setY(510);
+        fps.setText("L");
+    } else if (speedhack == "on" && cheat != "on") {
+        mode = "cube";
+        player.scale = 1;
+        speed = 200;
+        jump = -250;
+        miniplayer = false;
+        morti++;
+        player.setX(20);
+        player.setY(300);
+        player.setY(510);
+        fps.setText("L");
+    }
+    if (mode == "wave") {
+        trail.lineStyle(2, 0xffffff, 0.5);
+        trail.moveTo(player.x, player.y);
+        trail.lineTo(prevX, prevY);
+        trail.strokePath();
+        prevX = player.x;
+        prevY = player.y;
+        n++;
+        if (n == 200) {
+            trail.clear();
+            n = 0;
+        }
+    } else {
+        trail.clear();
+        prevX = player.x;
+        prevY = player.y;
     }
 }
 function hitspike(player, spikes) {
@@ -1027,6 +1117,7 @@ function hitspike(player, spikes) {
         mode = "cube";
         jump = -250;
         speed = 200;
+        SpeedX = "05";
         miniplayer = false;
         player.setX(20);
         player.setY(300);
@@ -1046,10 +1137,8 @@ function checkpointsave() {
 }
 function mini(player, minip) {
     // player.setSize(10, 10);
-    if (mode == "wave") jump = -400;
-    else jump = -200;
     miniplayer = true;
-    player.scale = 0.5;
+    player.scale = 0.6;
 }
 function normal(player, minip) {
     // player.setSize(10, 10);
@@ -1068,27 +1157,32 @@ function cubemode(player, ufop) {
     mode = "cube";
 }
 function speedchangeN() {
+    SpeedX = "05";
     speed = 200;
     jump = -250;
 }
 function speedchange1() {
+    SpeedX = "1";
     speed = 250;
     jump = -240;
 }
 function speedchange2() {
+    SpeedX = "2";
     speed = 300;
     jump = -230;
 }
 function speedchange3() {
+    SpeedX = "3";
     speed = 400;
     jump = -220;
 }
 function speedchange4() {
+    SpeedX = "4";
     speed = 500;
     jump = -210;
 }
 
-},{"fe65fea63b13e015":"9U0wC","../assets/bg.jpeg":"lqosZ","../assets/icon_1.png":"7tYvB","../assets/Block_1.png":"4yKgI","../assets/spike.png":"lAmj6","../assets/spikeflip.png":"4iGIb","../assets/orb_yellow.png":"4jyk1","../assets/miniportal.png":"dRbXy","../assets/normalportal.png":"kxxTd","../assets/ufo.png":"eGHpI","../assets/wave.png":"2dc1e","../assets/cubeportal.png":"9v16N","../assets/waveportal.png":"3tIpi","../assets/ufoportal.png":"fZZNE","../assets/speed05.png":"31IVo","../assets/2speed.png":"4CUui","../assets/speed1.png":"hX416","../assets/speed3.png":"gDtjE","../assets/speed4.png":"aq3i2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lqosZ":[function(require,module,exports) {
+},{"fe65fea63b13e015":"9U0wC","../assets/bg.jpeg":"lqosZ","../assets/icon_1.png":"7tYvB","../assets/Block_1.png":"4yKgI","../assets/slab.png":"2DGBQ","../assets/blockdefault.png":"fUTUi","../assets/spike.png":"lAmj6","../assets/spikeflip.png":"4iGIb","../assets/orb_yellow.png":"4jyk1","../assets/miniportal.png":"dRbXy","../assets/normalportal.png":"kxxTd","../assets/ufo.png":"eGHpI","../assets/wave.png":"2dc1e","../assets/cubeportal.png":"9v16N","../assets/waveportal.png":"3tIpi","../assets/ufoportal.png":"fZZNE","../assets/speed05.png":"31IVo","../assets/2speed.png":"4CUui","../assets/speed1.png":"hX416","../assets/speed3.png":"gDtjE","../assets/speed4.png":"aq3i2","../assets/Saw.png":"kmGNd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lqosZ":[function(require,module,exports) {
 module.exports = require("15137a19056ba2d2").getBundleURL("gnRNX") + "bg.371e0999.jpeg" + "?" + Date.now();
 
 },{"15137a19056ba2d2":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -1132,7 +1226,13 @@ module.exports = require("618c91be7437e4ab").getBundleURL("gnRNX") + "icon_1.3d1
 },{"618c91be7437e4ab":"lgJ39"}],"4yKgI":[function(require,module,exports) {
 module.exports = require("1a9839a4ce0cdff6").getBundleURL("gnRNX") + "Block_1.99fcd2ba.png" + "?" + Date.now();
 
-},{"1a9839a4ce0cdff6":"lgJ39"}],"lAmj6":[function(require,module,exports) {
+},{"1a9839a4ce0cdff6":"lgJ39"}],"2DGBQ":[function(require,module,exports) {
+module.exports = require("4e5c0ff339fa1ab1").getBundleURL("gnRNX") + "slab.f11e382f.png" + "?" + Date.now();
+
+},{"4e5c0ff339fa1ab1":"lgJ39"}],"fUTUi":[function(require,module,exports) {
+module.exports = require("8fa0bf181e699fe7").getBundleURL("gnRNX") + "blockdefault.a84c609c.png" + "?" + Date.now();
+
+},{"8fa0bf181e699fe7":"lgJ39"}],"lAmj6":[function(require,module,exports) {
 module.exports = require("e72bd015244d240c").getBundleURL("gnRNX") + "spike.bb8b98bc.png" + "?" + Date.now();
 
 },{"e72bd015244d240c":"lgJ39"}],"4iGIb":[function(require,module,exports) {
@@ -1177,6 +1277,9 @@ module.exports = require("3115b62508befc40").getBundleURL("gnRNX") + "speed3.f85
 },{"3115b62508befc40":"lgJ39"}],"aq3i2":[function(require,module,exports) {
 module.exports = require("e79ea0f00fa30687").getBundleURL("gnRNX") + "speed4.0bca990a.png" + "?" + Date.now();
 
-},{"e79ea0f00fa30687":"lgJ39"}]},["75sNA","gLLPy"], "gLLPy", "parcelRequire94c2")
+},{"e79ea0f00fa30687":"lgJ39"}],"kmGNd":[function(require,module,exports) {
+module.exports = require("8a6a2298551f3e27").getBundleURL("gnRNX") + "Saw.539913ac.png" + "?" + Date.now();
+
+},{"8a6a2298551f3e27":"lgJ39"}]},["75sNA","gLLPy"], "gLLPy", "parcelRequire94c2")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map

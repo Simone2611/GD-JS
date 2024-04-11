@@ -624,6 +624,9 @@ var _sawPng = require("../assets/Saw.png");
 var _sawPngDefault = parcelHelpers.interopDefault(_sawPng);
 var global = arguments[3];
 global.Phaser = require("ffd581cbf9e1f579");
+if (localStorage.getItem("anticheat") == null) localStorage.setItem("anticheat", "on");
+var n = 0;
+var hackss = localStorage.getItem("anticheat");
 var speed05;
 var speed1;
 var gravity = "normal";
@@ -649,13 +652,13 @@ var Deaths;
 var k = true;
 var w = true;
 var l = true;
-if (localStorage.getItem("morti") == null) localStorage.setItem("morti", 0);
+if (localStorage.getItem("morti-ch") == null) localStorage.setItem("morti-ch", 0);
 if (localStorage.getItem("gamekey") == null) {
     localStorage.setItem("gamekey", "arrow");
     window.location.reload;
 }
 var minip;
-var morti = localStorage.getItem("morti");
+var morti = localStorage.getItem("morti-ch");
 var spikes;
 var fps;
 var cursors;
@@ -753,6 +756,11 @@ function create() {
     // this.orby.create(800, 490, "orby").setCircle(10).refreshBody();
     //slab
     platforms.create(360, 460, "slab");
+    platforms.create(1400, 460, "slab");
+    platforms.create(1440, 460, "slab");
+    platforms.create(1480, 460, "slab");
+    platforms.create(1520, 460, "slab");
+    platforms.create(1560, 460, "slab");
     platforms.create(1950, 480, "slab");
     platforms.create(2400, 440, "slab");
     platforms.create(2400, 520, "slab");
@@ -788,7 +796,7 @@ function create() {
         fill: "whitesmoke",
         fontFamily: "Arial"
     });
-    Deaths = this.add.text(20, 470, morti + " Attempt", {
+    Deaths = this.add.text(20, 440, morti + " Attempt", {
         fontSize: "1.2rem",
         fill: "whitesmoke",
         fontFamily: "Arial"
@@ -828,17 +836,31 @@ function create() {
     this.cameras.main.startFollow(player);
     this.cameras.main.setDeadzone(null, 400);
     player.setY(510);
+    trail = this.add.graphics();
+    prevX = player.x;
+    prevY = player.y;
 }
 function update() {
+    hackss = localStorage.getItem("anticheat");
     gravity;
     if (miniplayer == true) {
+        jump = -200;
         if (mode == "wave") {
-            if (SpeedX == "05") wavejump = -400;
-            else if (SpeedX == "1") wavejump = -500;
-            else if (SpeedX == "2") wavejump = -600;
-            else if (SpeedX == "3") wavejump = -700;
-            else if (SpeedX == "4") wavejump = -800;
+            waveR = 1.3;
+            if (SpeedX == "05") jumpwave = -400;
+            else if (SpeedX == "1") jumpwave = -550;
+            else if (SpeedX == "2") jumpwave = -600;
+            else if (SpeedX == "3") jumpwave = -700;
+            else if (SpeedX == "4") jumpwave = -900;
         }
+    } else {
+        waveR = 1;
+        jumpwave = -200;
+        if (SpeedX == "05") jumpwave = -200;
+        else if (SpeedX == "1") jumpwave = -250;
+        else if (SpeedX == "2") jumpwave = -350;
+        else if (SpeedX == "3") jumpwave = -450;
+        else if (SpeedX == "4") jumpwave = -500;
     }
     if (speedhack != 1) cheat = "on";
     noclipAcc = localStorage.getItem("noclip");
@@ -851,8 +873,8 @@ function update() {
     // this.checkpoint.anims.play("flag", true);
     if (mode != "cube") {
         if (mode == "ufo") {
-            player.setSize(20, 20);
             player.setTexture("ufo");
+            player.setSize(20, 20);
             if (controls == "arrow") {
                 if (!player.body.touching.down) {
                     player.setVelocityX(speed * speedhack);
@@ -926,7 +948,7 @@ function update() {
                     player.setVelocityY(-jumpwave);
                     this.tweens.add({
                         targets: player,
-                        rotation: 1,
+                        rotation: waveR,
                         duration: 20,
                         persist: true
                     });
@@ -943,7 +965,7 @@ function update() {
                     player.setVelocityY(jumpwave);
                     this.tweens.add({
                         targets: player,
-                        rotation: -1,
+                        rotation: -waveR,
                         duration: 20,
                         persist: true
                     });
@@ -1036,16 +1058,69 @@ function update() {
         player.scale = 1;
         speed = 200;
         jump = -250;
+        SpeedX = "05";
         miniplayer = false;
         player.setX(20);
         player.setY(300);
         player.setY(510);
+        trail.clear();
     }
     fps.setText(Math.round(game.loop.actualFps) + " FPS");
     Deaths.setText(morti + " Attempts");
     if (localStorage.getItem("noclip") == "on") {
         this.physics.add.overlap(player, platforms);
         this.physics.add.overlap(player, spikes, hitspike, null, this);
+    }
+    if (hackss != "on") {
+        mode = "cube";
+        player.scale = 1;
+        speed = 200;
+        jump = -250;
+        miniplayer = false;
+        morti++;
+        player.setX(20);
+        player.setY(300);
+        player.setY(510);
+        fps.setText("L");
+    } else if (noclipAcc == "on" && cheat != "on") {
+        mode = "cube";
+        player.scale = 1;
+        speed = 200;
+        jump = -250;
+        miniplayer = false;
+        morti++;
+        player.setX(20);
+        player.setY(300);
+        player.setY(510);
+        fps.setText("L");
+    } else if (speedhack == "on" && cheat != "on") {
+        mode = "cube";
+        player.scale = 1;
+        speed = 200;
+        jump = -250;
+        miniplayer = false;
+        morti++;
+        player.setX(20);
+        player.setY(300);
+        player.setY(510);
+        fps.setText("L");
+    }
+    if (mode == "wave") {
+        trail.lineStyle(2, 0xffffff, 0.5);
+        trail.moveTo(player.x, player.y);
+        trail.lineTo(prevX, prevY);
+        trail.strokePath();
+        prevX = player.x;
+        prevY = player.y;
+        n++;
+        if (n == 200) {
+            trail.clear();
+            n = 0;
+        }
+    } else {
+        trail.clear();
+        prevX = player.x;
+        prevY = player.y;
     }
 }
 function hitspike(player, spikes) {
@@ -1057,6 +1132,7 @@ function hitspike(player, spikes) {
         mode = "cube";
         jump = -250;
         speed = 200;
+        SpeedX = "05";
         miniplayer = false;
         player.setX(20);
         player.setY(300);
@@ -1076,10 +1152,8 @@ function checkpointsave() {
 }
 function mini(player, minip) {
     // player.setSize(10, 10);
-    if (mode == "wave") jump = -400;
-    else jump = -200;
     miniplayer = true;
-    player.scale = 0.5;
+    player.scale = 0.6;
 }
 function normal(player, minip) {
     // player.setSize(10, 10);
@@ -1123,7 +1197,7 @@ function speedchange4() {
     jump = -210;
 }
 
-},{"ffd581cbf9e1f579":"9U0wC","../assets/bg2.png":"7ZMD6","../assets/icon_1.png":"gupD1","../assets/blackground.png":"9rdLq","../assets/slab.png":"gxyWl","../assets/blockdefault.png":"igKwq","../assets/spike.png":"8j5H5","../assets/spikeflip.png":"3rJVD","../assets/orb_yellow.png":"kkxMd","../assets/miniportal.png":"8dtYJ","../assets/normalportal.png":"1S3cd","../assets/ufo.png":"4MCzz","../assets/wave.png":"2OWk0","../assets/cubeportal.png":"gHlrw","../assets/waveportal.png":"b0cwk","../assets/ufoportal.png":"8qLR0","../assets/speed05.png":"4dJIw","../assets/2speed.png":"a0zJN","../assets/speed1.png":"5lGL8","../assets/speed3.png":"jrDfQ","../assets/speed4.png":"8AzZ3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../assets/Saw.png":"cFfHt"}],"7ZMD6":[function(require,module,exports) {
+},{"ffd581cbf9e1f579":"9U0wC","../assets/bg2.png":"7ZMD6","../assets/icon_1.png":"gupD1","../assets/blackground.png":"9rdLq","../assets/slab.png":"gxyWl","../assets/blockdefault.png":"igKwq","../assets/spike.png":"8j5H5","../assets/spikeflip.png":"3rJVD","../assets/orb_yellow.png":"kkxMd","../assets/miniportal.png":"8dtYJ","../assets/normalportal.png":"1S3cd","../assets/ufo.png":"4MCzz","../assets/wave.png":"2OWk0","../assets/cubeportal.png":"gHlrw","../assets/waveportal.png":"b0cwk","../assets/ufoportal.png":"8qLR0","../assets/speed05.png":"4dJIw","../assets/2speed.png":"a0zJN","../assets/speed1.png":"5lGL8","../assets/speed3.png":"jrDfQ","../assets/speed4.png":"8AzZ3","../assets/Saw.png":"cFfHt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7ZMD6":[function(require,module,exports) {
 module.exports = require("35e0402ffd139e1d").getBundleURL("boAnu") + "bg2.1c5ab178.png" + "?" + Date.now();
 
 },{"35e0402ffd139e1d":"lgJ39"}],"lgJ39":[function(require,module,exports) {

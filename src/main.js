@@ -3,6 +3,8 @@ global.Phaser = require("phaser");
 import bg from "../assets/bg.jpeg";
 import idle from "../assets/icon_1.png";
 import block from "../assets/Block_1.png";
+import slab from "../assets/slab.png";
+import block2 from "../assets/blockdefault.png";
 import spike from "../assets/spike.png";
 import spikeflip from "../assets/spikeflip.png";
 import orby from "../assets/orb_yellow.png";
@@ -20,8 +22,18 @@ import speedX2 from "../assets/2speed.png";
 import speedX1 from "../assets/speed1.png";
 import speedX3 from "../assets/speed3.png";
 import speedX4 from "../assets/speed4.png";
+
+import saw1 from "../assets/Saw.png";
+if (localStorage.getItem("anticheat") == null) {
+  localStorage.setItem("anticheat", "on");
+}
+var hackss = localStorage.getItem("anticheat");
 var speed05;
+var waveR;
 var speed1;
+var n = 0;
+var gravity = "normal";
+var jumpwave = -300;
 var speed2;
 var speed3;
 var speed4;
@@ -58,6 +70,7 @@ var spikes;
 var fps;
 var cursors;
 var speed = 200 * speedhack;
+var SpeedX = "05";
 var keyW;
 var keyR;
 var keySpace;
@@ -87,8 +100,11 @@ var game = new Phaser.Game(config);
 
 function preload() {
   this.load.image("bg", bg);
+  this.load.image("saw", saw1);
+  this.load.image("slab", slab);
   this.load.image("idle", idle);
   this.load.image("block", block);
+  this.load.image("block2", block2);
   this.load.image("spike", spike);
   this.load.image("spikeflip", spikeflip);
   this.load.image("orby", orby);
@@ -252,14 +268,50 @@ function create() {
   this.cameras.main.setDeadzone(null, 400);
 
   player.setY(510);
+
+  trail = this.add.graphics();
+
+  prevX = player.x;
+  prevY = player.y;
 }
 
 function update() {
+  hackss = localStorage.getItem("anticheat");
+  if (gravity != "normal") {
+    // dopo mettere qualcosa per portale giallo
+  } else {
+  }
+
   if (miniplayer == true) {
+    jump = -200;
     if (mode == "wave") {
-      jump = -400;
+      waveR = 1.3;
+      if (SpeedX == "05") {
+        jumpwave = -400;
+      } else if (SpeedX == "1") {
+        jumpwave = -550;
+      } else if (SpeedX == "2") {
+        jumpwave = -600;
+      } else if (SpeedX == "3") {
+        jumpwave = -700;
+      } else if (SpeedX == "4") {
+        jumpwave = -900;
+      }
     } else {
-      jump = -200;
+    }
+  } else {
+    waveR = 1;
+    jumpwave = -200;
+    if (SpeedX == "05") {
+      jumpwave = -200;
+    } else if (SpeedX == "1") {
+      jumpwave = -250;
+    } else if (SpeedX == "2") {
+      jumpwave = -350;
+    } else if (SpeedX == "3") {
+      jumpwave = -450;
+    } else if (SpeedX == "4") {
+      jumpwave = -500;
     }
   }
   if (speedhack != 1) {
@@ -267,21 +319,26 @@ function update() {
   }
 
   noclipAcc = localStorage.getItem("noclip");
+  speedhack = localStorage.getItem("speedhack");
+
   //spike
 
   let controls = localStorage.getItem("gamekey");
   let space = localStorage.getItem("spacebar");
-  player.setVelocityX(speed);
+  player.setVelocityX(speed * speedhack);
+
   // Player movement
   // this.checkpoint.anims.play("flag", true);
   if (mode != "cube") {
     if (mode == "ufo") {
-      player.setSize(30, 30);
       player.setTexture("ufo");
+
+      player.setSize(20, 20);
 
       if (controls == "arrow") {
         if (!player.body.touching.down) {
-          player.setVelocityX(speed);
+          player.setVelocityX(speed * speedhack);
+
           this.tweens.add({
             targets: player, //your image that must spin
             rotation: 0, //rotation value must be radian
@@ -289,7 +346,7 @@ function update() {
             persist: true,
           });
         } else {
-          player.setVelocityX(speed);
+          player.setVelocityX(speed * speedhack);
           this.tweens.add({
             targets: player, //your image that must spin
             rotation: 0, //rotation value must be radian
@@ -313,7 +370,7 @@ function update() {
         }
       } else if (controls == "wad") {
         if (!player.body.touching.down) {
-          player.setVelocityX(speed);
+          player.setVelocityX(speed * speedhack);
           this.tweens.add({
             targets: player, //your image that must spin
             rotation: 0, //rotation value must be radian
@@ -321,7 +378,7 @@ function update() {
             persist: true,
           });
         } else {
-          player.setVelocityX(speed);
+          player.setVelocityX(speed * speedhack);
         }
 
         if (keyW.isDown && w == false) {
@@ -355,20 +412,20 @@ function update() {
       }
     } else if (mode == "wave") {
       player.setTexture("wave");
-      player.setSize(13, 13);
+      player.setSize(12, 12);
       if (controls == "arrow") {
         if (!player.body.touching.down) {
-          player.setVelocityX(speed);
-          player.setVelocityY(-jump);
+          player.setVelocityX(speed * speedhack);
+          player.setVelocityY(-jumpwave);
 
           this.tweens.add({
             targets: player, //your image that must spin
-            rotation: 1, //rotation value must be radian
+            rotation: waveR, //rotation value must be radian
             duration: 20, //duration is in milliseconds
             persist: true,
           });
         } else {
-          player.setVelocityX(speed);
+          player.setVelocityX(speed * speedhack);
           this.tweens.add({
             targets: player, //your image that must spin
             rotation: 0, //rotation value must be radian
@@ -377,11 +434,11 @@ function update() {
           });
         }
         if (cursors.up.isDown) {
-          player.setVelocityY(jump);
+          player.setVelocityY(jumpwave);
 
           this.tweens.add({
             targets: player, //your image that must spin
-            rotation: -1, //rotation value must be radian
+            rotation: -waveR, //rotation value must be radian
             duration: 20, //duration is in milliseconds
             persist: true,
           });
@@ -390,13 +447,13 @@ function update() {
         }
       } else if (controls == "wad") {
         if (!player.body.touching.down) {
-          player.setVelocityX(speed);
+          player.setVelocityX(speed * speedhack);
         } else {
-          player.setVelocityX(speed);
+          player.setVelocityX(speed * speedhack);
         }
 
         if (keyW.isDown) {
-          player.setVelocityY(jump);
+          player.setVelocityY(jumpwave);
           this.tweens.add({
             targets: player, //your image that must spin
             rotation: -1, //rotation value must be radian
@@ -409,7 +466,7 @@ function update() {
       }
       if (space == "on") {
         if (keySpace.isDown) {
-          player.setVelocityY(jump);
+          player.setVelocityY(jumpwave);
           this.tweens.add({
             targets: player, //your image that must spin
             rotation: -1, //rotation value must be radian
@@ -426,9 +483,9 @@ function update() {
     player.setSize(30, 30);
     if (controls == "arrow") {
       if (!player.body.touching.down) {
-        player.setVelocityX(speed);
+        player.setVelocityX(speed * speedhack);
       } else {
-        player.setVelocityX(speed);
+        player.setVelocityX(speed * speedhack);
         this.tweens.add({
           targets: player, //your image that must spin
           rotation: 0, //rotation value must be radian
@@ -448,7 +505,7 @@ function update() {
       }
     } else if (controls == "wad") {
       if (!player.body.touching.down) {
-        player.setVelocityX(speed);
+        player.setVelocityX(speed * speedhack);
         this.tweens.add({
           targets: player, //your image that must spin
           rotation: 0, //rotation value must be radian
@@ -456,7 +513,7 @@ function update() {
           persist: true,
         });
       } else {
-        player.setVelocityX(speed);
+        player.setVelocityX(speed * speedhack);
       }
 
       if (keyW.isDown && player.body.touching.down) {
@@ -487,10 +544,12 @@ function update() {
     player.scale = 1;
     speed = 200;
     jump = -250;
+    SpeedX = "05";
     miniplayer = false;
     player.setX(20);
     player.setY(300);
     player.setY(510);
+    trail.clear();
   }
 
   fps.setText(Math.round(game.loop.actualFps) + " FPS");
@@ -498,6 +557,59 @@ function update() {
   if (localStorage.getItem("noclip") == "on") {
     this.physics.add.overlap(player, platforms);
     this.physics.add.overlap(player, spikes, hitspike, null, this);
+  }
+  if (hackss != "on") {
+    mode = "cube";
+    player.scale = 1;
+    speed = 200;
+    jump = -250;
+    miniplayer = false;
+    morti++;
+    player.setX(20);
+    player.setY(300);
+    player.setY(510);
+    fps.setText("L");
+  } else if (noclipAcc == "on" && cheat != "on") {
+    mode = "cube";
+    player.scale = 1;
+    speed = 200;
+    jump = -250;
+    miniplayer = false;
+    morti++;
+    player.setX(20);
+    player.setY(300);
+    player.setY(510);
+    fps.setText("L");
+  } else if (speedhack == "on" && cheat != "on") {
+    mode = "cube";
+    player.scale = 1;
+    speed = 200;
+    jump = -250;
+    miniplayer = false;
+    morti++;
+    player.setX(20);
+    player.setY(300);
+    player.setY(510);
+    fps.setText("L");
+  }
+
+  if (mode == "wave") {
+    trail.lineStyle(2, 0xffffff, 0.5);
+    trail.moveTo(player.x, player.y);
+    trail.lineTo(prevX, prevY);
+    trail.strokePath();
+
+    prevX = player.x;
+    prevY = player.y;
+    n++;
+    if (n == 200) {
+      trail.clear();
+      n = 0;
+    }
+  } else {
+    trail.clear();
+    prevX = player.x;
+    prevY = player.y;
   }
 }
 
@@ -512,6 +624,7 @@ function hitspike(player, spikes) {
     mode = "cube";
     jump = -250;
     speed = 200;
+    SpeedX = "05";
     miniplayer = false;
     player.setX(20);
     player.setY(300);
@@ -536,19 +649,16 @@ function checkpointsave() {
 
 function mini(player, minip) {
   // player.setSize(10, 10);
-  if (mode == "wave") {
-    jump = -400;
-  } else {
-    jump = -200;
-  }
+
   miniplayer = true;
-  player.scale = 0.5;
+  player.scale = 0.6;
 }
 
 function normal(player, minip) {
   // player.setSize(10, 10);
   miniplayer = false;
   jump = -250;
+
   if (player.scale != 1) {
     player.setY(player.body.position.y - 20);
   }
@@ -566,25 +676,30 @@ function cubemode(player, ufop) {
   mode = "cube";
 }
 function speedchangeN() {
+  SpeedX = "05";
   speed = 200;
   jump = -250;
 }
 
 function speedchange1() {
+  SpeedX = "1";
   speed = 250;
   jump = -240;
 }
 
 function speedchange2() {
+  SpeedX = "2";
   speed = 300;
   jump = -230;
 }
 
 function speedchange3() {
+  SpeedX = "3";
   speed = 400;
   jump = -220;
 }
 function speedchange4() {
+  SpeedX = "4";
   speed = 500;
   jump = -210;
 }
