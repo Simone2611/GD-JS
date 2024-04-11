@@ -24,11 +24,9 @@ import speedX3 from "../assets/speed3.png";
 import speedX4 from "../assets/speed4.png";
 
 import saw1 from "../assets/Saw.png";
-if (localStorage.getItem("anticheat") == null) {
-  localStorage.setItem("anticheat", "on");
-}
+
 var n = 0;
-var hackss = localStorage.getItem("anticheat");
+
 var speed05;
 var speed1;
 var gravity = "normal";
