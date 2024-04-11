@@ -627,6 +627,7 @@ global.Phaser = require("fe65fea63b13e015");
 var n = 0;
 var trail;
 var speed05;
+var waveR;
 var prevX;
 var prevY;
 var speed1;

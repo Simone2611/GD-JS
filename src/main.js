@@ -28,7 +28,7 @@ import saw1 from "../assets/Saw.png";
 var n = 0;
 var trail;
 var speed05;
-
+var waveR;
 var prevX;
 var prevY;
 var speed1;
