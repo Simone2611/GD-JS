@@ -618,7 +618,7 @@ var _speed4Png = require("../assets/speed4.png");
 var _speed4PngDefault = parcelHelpers.interopDefault(_speed4Png);
 var global = arguments[3];
 global.Phaser = require("fe65fea63b13e015");
-var speed;
+var speed05;
 var speed1;
 var speed2;
 var speed3;

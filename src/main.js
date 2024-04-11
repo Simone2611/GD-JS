@@ -20,7 +20,7 @@ import speedX2 from "../assets/2speed.png";
 import speedX1 from "../assets/speed1.png";
 import speedX3 from "../assets/speed3.png";
 import speedX4 from "../assets/speed4.png";
-var speed;
+var speed05;
 var speed1;
 var speed2;
 var speed3;
