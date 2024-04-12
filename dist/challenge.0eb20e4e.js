@@ -1070,7 +1070,7 @@ function update() {
         jump = -250;
         SpeedX = "05";
         miniplayer = false;
-        player.setX(800);
+        player.setX(20);
         player.setY(300);
         player.setY(510);
         trail.clear();
