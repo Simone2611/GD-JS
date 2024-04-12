@@ -148,15 +148,23 @@ function create() {
   }
   // saw
   saw = this.physics.add.staticGroup();
-  saw.create(2000, 430, "saw").setSize(15, 15).setCircle(10).refreshBody();
+  saw.create(2000, 460, "saw").setSize(15, 15).setCircle(10).refreshBody();
+  saw.create(2030, 420, "saw").setSize(15, 15).setCircle(10).refreshBody();
+  saw.create(1970, 380, "saw").setSize(15, 15).setCircle(10).refreshBody();
+
+  saw.create(2400, 530, "saw").setSize(15, 15).setCircle(10).refreshBody();
+
+  saw.create(2400, 430, "saw").setSize(15, 15).setCircle(10).refreshBody();
+  saw.create(2400, 380, "saw").setSize(15, 15).setCircle(10).refreshBody();
+  saw.create(2380, 350, "saw").setSize(15, 15).setCircle(10).refreshBody();
   // spike
   spikes = this.physics.add.staticGroup();
-  spikes.create(360, 480, "spikeflip").setSize(6, 12, true);
+  spikes.create(360, 510, "spikeflip").setSize(6, 12, true);
   spikes.create(400, 537, "spike").setSize(6, 12, true);
-  spikes.create(432, 537, "spike").setSize(6, 12, true);
+  spikes.create(435, 537, "spike").setSize(6, 12, true);
 
   spikes.create(600, 537, "spike").setSize(6, 12, true);
-  spikes.create(632, 537, "spike").setSize(6, 12, true);
+  spikes.create(635, 537, "spike").setSize(6, 12, true);
 
   spikes.create(1100, 500, "spikeflip").setSize(6, 12, true);
   spikes.create(1130, 540, "spike").setSize(6, 12, true);
@@ -175,6 +183,9 @@ function create() {
 
   spikes.create(2400, 460, "spikeflip").setSize(6, 12, true);
   spikes.create(2400, 500, "spike").setSize(6, 12, true);
+
+  spikes.create(2800, 500, "spikeflip").setSize(6, 12, true);
+  spikes.create(2852, 540, "spike").setSize(6, 12, true);
   //   spikes.create(1225, 544, "spike").setSize(6, 12, true).scale = 0.5;
 
   // //orb
@@ -183,7 +194,7 @@ function create() {
   // this.orby.create(800, 490, "orby").setCircle(10).refreshBody();
 
   //slab
-  platforms.create(360, 460, "slab");
+  platforms.create(360, 490, "slab");
 
   platforms.create(1400, 460, "slab");
   platforms.create(1440, 460, "slab");
@@ -194,7 +205,7 @@ function create() {
   platforms.create(1950, 480, "slab");
   platforms.create(2400, 440, "slab");
   platforms.create(2400, 520, "slab");
-
+  platforms.create(2800, 480, "slab");
   // blocks
   for (let i = 472; i > 30; i -= 30) {
     platforms.create(1100, i, "block2");
@@ -263,7 +274,7 @@ function create() {
   wavep.create(1000, 500, "waveportal");
   cubep.create(1400, 500, "cubeportal");
   ufop.create(1800, 500, "ufoportal");
-  cubep.create(2700, 500, "cubeportal");
+  cubep.create(2450, 500, "cubeportal");
   this.physics.add.overlap(player, wavep, wavemode, null, this);
   this.physics.add.overlap(player, cubep, cubemode, null, this);
   this.physics.add.overlap(player, ufop, ufomode, null, this);
@@ -298,6 +309,8 @@ function create() {
 
   prevX = player.x;
   prevY = player.y;
+
+  this.physics.add.collider(player, saw, hitspike, null, this);
 }
 
 function update() {
@@ -570,7 +583,7 @@ function update() {
     jump = -250;
     SpeedX = "05";
     miniplayer = false;
-    player.setX(20);
+    player.setX(800);
     player.setY(300);
     player.setY(510);
     trail.clear();
@@ -606,7 +619,7 @@ function update() {
 function hitspike(player, spikes) {
   morti++;
 
-  localStorage.setItem("morti", morti);
+  localStorage.setItem("morti-ch", morti);
   if (noclipAcc == "on") {
     cheat = "on";
   } else {
