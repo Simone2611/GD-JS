@@ -4,6 +4,7 @@ import bg from "../assets/bg.jpeg";
 import idle from "../assets/icon_1.png";
 import block from "../assets/Block_1.png";
 import slab from "../assets/slab.png";
+
 import block2 from "../assets/blockdefault.png";
 import spike from "../assets/spike.png";
 import spikeflip from "../assets/spikeflip.png";
@@ -24,7 +25,16 @@ import speedX3 from "../assets/speed3.png";
 import speedX4 from "../assets/speed4.png";
 
 import saw1 from "../assets/Saw.png";
+import slopes from "../assets/slope-1.png";
+import slopes1 from "../assets/slope-1-1.png";
+import slopes2 from "../assets/slope-2.png";
+import slopes22 from "../assets/slope-2-1.png";
+var slope;
+var slope1;
+var slope2;
+var slope22;
 
+var slopeH;
 var n = 0;
 var trail;
 var speed05;
@@ -74,18 +84,25 @@ var SpeedX = "05";
 var keyW;
 var keyR;
 var keySpace;
-
+if (localStorage.getItem("fps") == null) {
+  localStorage.setItem("fps", "60");
+}
+var fps = localStorage.getItem("fps");
 var config = {
   type: Phaser.AUTO,
+  fps: {
+    target: fps,
+    forceSetTimeOut: true,
+  },
   width: 800,
   height: 600,
+  backgroundColor: "#000026",
   parent: "game",
   physics: {
     default: "arcade",
     arcade: {
       gravity: { y: 700 },
       debug: false,
-      fps: 240,
     },
   },
 
@@ -102,6 +119,11 @@ function preload() {
   this.load.image("bg", bg);
   this.load.image("saw", saw1);
   this.load.image("slab", slab);
+  this.load.image("slope", slopes);
+  this.load.image("slope1", slopes1);
+  this.load.image("slope2", slopes2);
+  this.load.image("slope22", slopes22);
+
   this.load.image("idle", idle);
   this.load.image("block", block);
   this.load.image("block2", block2);
@@ -134,16 +156,13 @@ function create() {
   } else {
     cheat = "off";
   }
-  // Background
-
-  let bg = this.add.image(-400, 0, "bg").setOrigin(0, 0);
 
   // Platform
 
   platforms = this.physics.add.staticGroup();
   //grass
 
-  for (let i = -400; i < 20000; i += 100) {
+  for (let i = -400; i < 300000; i += 100) {
     platforms.create(i, 600, "block");
   }
 
@@ -195,6 +214,7 @@ function create() {
 
   minip.create(800, 500, "miniportal");
   minip.create(1050, 500, "miniportal");
+  minip.create(2400, 500, "miniportal");
   // normal
 
   normp = this.physics.add.staticGroup();
@@ -273,6 +293,17 @@ function create() {
 
   prevX = player.x;
   prevY = player.y;
+  // slope
+  slope = this.physics.add.staticGroup();
+
+  // x = + 30 y = -60 sopra
+  // x = -30 y = +60 sotto
+  slope.create(2565, 473, "slope1").setOrigin(0.3, 0.35).setSize(10, 30);
+  slope.create(2570, 535, "slope").setOrigin(0.7, 0.7).setSize(10, 30);
+  slope.create(2600, 475, "slope").setOrigin(0.7, 0.7).setSize(10, 30);
+  slope.create(2619, 473, "slope2").setOrigin(0.3, 0.65).setSize(10, 30);
+  slope.create(2649, 533, "slope2").setOrigin(0.3, 0.65).setSize(10, 30);
+  this.physics.add.collider(player, slope, slopehit, null, this);
 }
 
 function update() {
@@ -288,7 +319,7 @@ function update() {
       if (SpeedX == "05") {
         jumpwave = -400;
       } else if (SpeedX == "1") {
-        jumpwave = -550;
+        jumpwave = -450;
       } else if (SpeedX == "2") {
         jumpwave = -600;
       } else if (SpeedX == "3") {
@@ -539,13 +570,13 @@ function update() {
   }
 
   if (keyR.isDown) {
-    mode = "cube";
+    mode = "wave";
     player.scale = 1;
     speed = 200;
     jump = -250;
     SpeedX = "05";
     miniplayer = false;
-    player.setX(20);
+    player.setX(2400);
     player.setY(300);
     player.setY(510);
     trail.clear();
@@ -585,6 +616,20 @@ function hitspike(player, spikes) {
   if (noclipAcc == "on") {
     cheat = "on";
   } else {
+    player.scale = 1;
+    mode = "cube";
+    jump = -250;
+    speed = 200;
+    SpeedX = "05";
+    miniplayer = false;
+    player.setX(20);
+    player.setY(300);
+    player.setY(510);
+  }
+}
+
+function slopehit() {
+  if (mode == "wave") {
     player.scale = 1;
     mode = "cube";
     jump = -250;

@@ -28,6 +28,11 @@
 - Wave trail
 - Wave movement mini and normal improved
 
+<span style="color: #7F3FE0; ">-v 1.2</span>
+
+- Slope added
+- bg fix
+
 ---
 
 - npx parcel index.html challenge.html

@@ -71,18 +71,25 @@ var SpeedX = "05";
 var keyW;
 var keyR;
 var keySpace;
-
+if (localStorage.getItem("fps") == null) {
+  localStorage.setItem("fps", "60");
+}
+var fps = localStorage.getItem("fps");
 var config = {
   type: Phaser.AUTO,
+  fps: {
+    target: fps,
+    forceSetTimeOut: true,
+  },
   width: 800,
   height: 600,
+  backgroundColor: "#1c0000",
   parent: "game",
   physics: {
     default: "arcade",
     arcade: {
       gravity: { y: 700 },
       debug: false,
-      fps: 240,
     },
   },
 
@@ -131,12 +138,6 @@ function create() {
   } else {
     cheat = "off";
   }
-  // Background
-
-  this.add.image(-400, 0, "bg").setOrigin(0, 0);
-  for (let i = 1100; i < 30000; i += 1500) {
-    this.add.image(i, 0, "bg").setOrigin(0, 0);
-  }
   // Platform
 
   platforms = this.physics.add.staticGroup();
@@ -152,10 +153,10 @@ function create() {
   spikes = this.physics.add.staticGroup();
   spikes.create(360, 480, "spikeflip").setSize(6, 12, true);
   spikes.create(400, 537, "spike").setSize(6, 12, true);
-  spikes.create(430, 537, "spike").setSize(6, 12, true);
+  spikes.create(432, 537, "spike").setSize(6, 12, true);
 
   spikes.create(600, 537, "spike").setSize(6, 12, true);
-  spikes.create(630, 537, "spike").setSize(6, 12, true);
+  spikes.create(632, 537, "spike").setSize(6, 12, true);
 
   spikes.create(1100, 500, "spikeflip").setSize(6, 12, true);
   spikes.create(1130, 540, "spike").setSize(6, 12, true);

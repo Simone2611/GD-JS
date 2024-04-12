@@ -622,8 +622,21 @@ var _speed4Png = require("../assets/speed4.png");
 var _speed4PngDefault = parcelHelpers.interopDefault(_speed4Png);
 var _sawPng = require("../assets/Saw.png");
 var _sawPngDefault = parcelHelpers.interopDefault(_sawPng);
+var _slope1Png = require("../assets/slope-1.png");
+var _slope1PngDefault = parcelHelpers.interopDefault(_slope1Png);
+var _slope11Png = require("../assets/slope-1-1.png");
+var _slope11PngDefault = parcelHelpers.interopDefault(_slope11Png);
+var _slope2Png = require("../assets/slope-2.png");
+var _slope2PngDefault = parcelHelpers.interopDefault(_slope2Png);
+var _slope21Png = require("../assets/slope-2-1.png");
+var _slope21PngDefault = parcelHelpers.interopDefault(_slope21Png);
 var global = arguments[3];
 global.Phaser = require("fe65fea63b13e015");
+var slope;
+var slope1;
+var slope2;
+var slope22;
+var slopeH;
 var n = 0;
 var trail;
 var speed05;
@@ -669,10 +682,17 @@ var SpeedX = "05";
 var keyW;
 var keyR;
 var keySpace;
+if (localStorage.getItem("fps") == null) localStorage.setItem("fps", "60");
+var fps = localStorage.getItem("fps");
 var config = {
     type: Phaser.AUTO,
+    fps: {
+        target: fps,
+        forceSetTimeOut: true
+    },
     width: 800,
     height: 600,
+    backgroundColor: "#000026",
     parent: "game",
     physics: {
         default: "arcade",
@@ -680,8 +700,7 @@ var config = {
             gravity: {
                 y: 700
             },
-            debug: false,
-            fps: 240
+            debug: false
         }
     },
     scene: {
@@ -695,6 +714,10 @@ function preload() {
     this.load.image("bg", (0, _bgJpegDefault.default));
     this.load.image("saw", (0, _sawPngDefault.default));
     this.load.image("slab", (0, _slabPngDefault.default));
+    this.load.image("slope", (0, _slope1PngDefault.default));
+    this.load.image("slope1", (0, _slope11PngDefault.default));
+    this.load.image("slope2", (0, _slope2PngDefault.default));
+    this.load.image("slope22", (0, _slope21PngDefault.default));
     this.load.image("idle", (0, _icon1PngDefault.default));
     this.load.image("block", (0, _block1PngDefault.default));
     this.load.image("block2", (0, _blockdefaultPngDefault.default));
@@ -721,12 +744,10 @@ function create() {
         this.physics.world.createDebugGraphic(true);
         cheat = "on";
     } else cheat = "off";
-    // Background
-    let bg = this.add.image(-400, 0, "bg").setOrigin(0, 0);
     // Platform
     platforms = this.physics.add.staticGroup();
     //grass
-    for(let i = -400; i < 20000; i += 100)platforms.create(i, 600, "block");
+    for(let i = -400; i < 300000; i += 100)platforms.create(i, 600, "block");
     // spike
     spikes = this.physics.add.staticGroup();
     spikes.create(360, 480, "spikeflip").setSize(6, 12, true);
@@ -764,6 +785,7 @@ function create() {
     minip = this.physics.add.staticGroup();
     minip.create(800, 500, "miniportal");
     minip.create(1050, 500, "miniportal");
+    minip.create(2400, 500, "miniportal");
     // normal
     normp = this.physics.add.staticGroup();
     normp.create(900, 500, "normalportal");
@@ -825,6 +847,16 @@ function create() {
     trail = this.add.graphics();
     prevX = player.x;
     prevY = player.y;
+    // slope
+    slope = this.physics.add.staticGroup();
+    // x = + 30 y = -60 sopra
+    // x = -30 y = +60 sotto
+    slope.create(2565, 473, "slope1").setOrigin(0.3, 0.35).setSize(10, 30);
+    slope.create(2570, 535, "slope").setOrigin(0.7, 0.7).setSize(10, 30);
+    slope.create(2600, 475, "slope").setOrigin(0.7, 0.7).setSize(10, 30);
+    slope.create(2619, 473, "slope2").setOrigin(0.3, 0.65).setSize(10, 30);
+    slope.create(2649, 533, "slope2").setOrigin(0.3, 0.65).setSize(10, 30);
+    this.physics.add.collider(player, slope, slopehit, null, this);
 }
 function update() {
     gravity;
@@ -833,7 +865,7 @@ function update() {
         if (mode == "wave") {
             waveR = 1.3;
             if (SpeedX == "05") jumpwave = -400;
-            else if (SpeedX == "1") jumpwave = -550;
+            else if (SpeedX == "1") jumpwave = -450;
             else if (SpeedX == "2") jumpwave = -600;
             else if (SpeedX == "3") jumpwave = -700;
             else if (SpeedX == "4") jumpwave = -900;
@@ -1039,13 +1071,13 @@ function update() {
         }
     }
     if (keyR.isDown) {
-        mode = "cube";
+        mode = "wave";
         player.scale = 1;
         speed = 200;
         jump = -250;
         SpeedX = "05";
         miniplayer = false;
-        player.setX(20);
+        player.setX(2400);
         player.setY(300);
         player.setY(510);
         trail.clear();
@@ -1079,6 +1111,19 @@ function hitspike(player, spikes) {
     localStorage.setItem("morti", morti);
     if (noclipAcc == "on") cheat = "on";
     else {
+        player.scale = 1;
+        mode = "cube";
+        jump = -250;
+        speed = 200;
+        SpeedX = "05";
+        miniplayer = false;
+        player.setX(20);
+        player.setY(300);
+        player.setY(510);
+    }
+}
+function slopehit() {
+    if (mode == "wave") {
         player.scale = 1;
         mode = "cube";
         jump = -250;
@@ -1148,7 +1193,7 @@ function speedchange4() {
     jump = -210;
 }
 
-},{"fe65fea63b13e015":"9U0wC","../assets/bg.jpeg":"lqosZ","../assets/icon_1.png":"7tYvB","../assets/Block_1.png":"4yKgI","../assets/slab.png":"2DGBQ","../assets/blockdefault.png":"fUTUi","../assets/spike.png":"lAmj6","../assets/spikeflip.png":"4iGIb","../assets/orb_yellow.png":"4jyk1","../assets/miniportal.png":"dRbXy","../assets/normalportal.png":"kxxTd","../assets/ufo.png":"eGHpI","../assets/wave.png":"2dc1e","../assets/cubeportal.png":"9v16N","../assets/waveportal.png":"3tIpi","../assets/ufoportal.png":"fZZNE","../assets/speed05.png":"31IVo","../assets/2speed.png":"4CUui","../assets/speed1.png":"hX416","../assets/speed3.png":"gDtjE","../assets/speed4.png":"aq3i2","../assets/Saw.png":"kmGNd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lqosZ":[function(require,module,exports) {
+},{"fe65fea63b13e015":"9U0wC","../assets/bg.jpeg":"lqosZ","../assets/icon_1.png":"7tYvB","../assets/Block_1.png":"4yKgI","../assets/slab.png":"2DGBQ","../assets/blockdefault.png":"fUTUi","../assets/spike.png":"lAmj6","../assets/spikeflip.png":"4iGIb","../assets/orb_yellow.png":"4jyk1","../assets/miniportal.png":"dRbXy","../assets/normalportal.png":"kxxTd","../assets/ufo.png":"eGHpI","../assets/wave.png":"2dc1e","../assets/cubeportal.png":"9v16N","../assets/waveportal.png":"3tIpi","../assets/ufoportal.png":"fZZNE","../assets/speed05.png":"31IVo","../assets/2speed.png":"4CUui","../assets/speed1.png":"hX416","../assets/speed3.png":"gDtjE","../assets/speed4.png":"aq3i2","../assets/Saw.png":"kmGNd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../assets/slope-1.png":"esoZQ","../assets/slope-1-1.png":"6aNn5","../assets/slope-2.png":"c3ZWn","../assets/slope-2-1.png":"ggcTy"}],"lqosZ":[function(require,module,exports) {
 module.exports = require("15137a19056ba2d2").getBundleURL("gnRNX") + "bg.371e0999.jpeg" + "?" + Date.now();
 
 },{"15137a19056ba2d2":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -1246,6 +1291,18 @@ module.exports = require("e79ea0f00fa30687").getBundleURL("gnRNX") + "speed4.0bc
 },{"e79ea0f00fa30687":"lgJ39"}],"kmGNd":[function(require,module,exports) {
 module.exports = require("8a6a2298551f3e27").getBundleURL("gnRNX") + "Saw.539913ac.png" + "?" + Date.now();
 
-},{"8a6a2298551f3e27":"lgJ39"}]},["75sNA","gLLPy"], "gLLPy", "parcelRequire94c2")
+},{"8a6a2298551f3e27":"lgJ39"}],"esoZQ":[function(require,module,exports) {
+module.exports = require("dbfd322773c8f16a").getBundleURL("gnRNX") + "slope-1.a8bb95d3.png" + "?" + Date.now();
+
+},{"dbfd322773c8f16a":"lgJ39"}],"6aNn5":[function(require,module,exports) {
+module.exports = require("b822f8aff214338c").getBundleURL("gnRNX") + "slope-1-1.04fa4eee.png" + "?" + Date.now();
+
+},{"b822f8aff214338c":"lgJ39"}],"c3ZWn":[function(require,module,exports) {
+module.exports = require("6f5280b5e745ac74").getBundleURL("gnRNX") + "slope-2.3514290d.png" + "?" + Date.now();
+
+},{"6f5280b5e745ac74":"lgJ39"}],"ggcTy":[function(require,module,exports) {
+module.exports = require("23b4649e52f6cfd3").getBundleURL("gnRNX") + "slope-2-1.1a8652ca.png" + "?" + Date.now();
+
+},{"23b4649e52f6cfd3":"lgJ39"}]},["75sNA","gLLPy"], "gLLPy", "parcelRequire94c2")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map

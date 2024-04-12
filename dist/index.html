@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Gioco v1.3</title>
     <link rel="stylesheet" href="/index.0c8c5dbd.css">
+
     <script src="/index.50a1cddf.js"></script><script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
     <style>body {
   margin: 0;
@@ -36,6 +37,8 @@
       <button id="noclip">Noclip</button>
       <input id="speed" placeholder="Speedhack 1.2, 2....">
       <button id="Speedhack">Invio (speedhack)</button>
+      <button id="fps">Fps bypass</button>
+      <input id="infps" placeholder="60, 140, 240, 360...">
       <p>How to play</p>
       <p>Jump: Up arrow, w or spacebar if you enable it</p>
       <p>R = Replay from last Checkpoint</p>
@@ -43,7 +46,15 @@
 
     <script src="/index.4d6bcbeb.js" defer=""></script>
 
-    <script>const lvl1 = document.getElementById("lvl1");
+    <script>const fpsbypass = document.getElementById("fps");
+fpsbypass.addEventListener("click", (e)=>{
+    let valuefps = document.getElementById("infps").value;
+    if (valuefps > 20) {
+        localStorage.setItem("fps", valuefps);
+        window.location.reload();
+    }
+});
+const lvl1 = document.getElementById("lvl1");
 lvl1.addEventListener("click", (e)=>{
     window.location.href = "/";
 });
