@@ -785,7 +785,6 @@ function create() {
     minip = this.physics.add.staticGroup();
     minip.create(800, 500, "miniportal");
     minip.create(1050, 500, "miniportal");
-    minip.create(2400, 500, "miniportal");
     // normal
     normp = this.physics.add.staticGroup();
     normp.create(900, 500, "normalportal");
@@ -1071,13 +1070,13 @@ function update() {
         }
     }
     if (keyR.isDown) {
-        mode = "wave";
+        mode = "cube";
         player.scale = 1;
         speed = 200;
         jump = -250;
         SpeedX = "05";
         miniplayer = false;
-        player.setX(2400);
+        player.setX(20);
         player.setY(300);
         player.setY(510);
         trail.clear();
